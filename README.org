@@ -1,4 +1,34 @@
 #+TITLE: CalibrePluginScaleATon
------
+
+* CalibrePluginScaleATon
 
 A skeleton that "tries" to be a basis for practical calibre plugin creation
+
+* memo
+
+** where we are
+
+   #+begin_src sh :eval never
+   lsb_release -a
+   #+end_src
+
+   #+RESULTS:
+   | Distributor ID: | Ubuntu             |
+   | Description:    | Ubuntu 12.04.1 LTS |
+   | Release:        | 12.04              |
+   | Codename:       | precise            |
+
+
+   #+begin_src sh :results output :eval never
+   calibredb --version
+   #+end_src
+
+   #+RESULTS:
+   : calibredb (calibre 0.9.11)
+
+** where we want to go
+
+   - add a menu entry to right click that says "Get info"
+   - when you click it, it prints the dict of the book entry
+     
+** 
