@@ -2,9 +2,11 @@
 
 * CalibrePluginScaleATon
 
-A skeleton that "tries" to be a basis for practical calibre plugin creation
+A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 * memo
+
+  github's org-mode renderer will not render this correctly!
 
 ** where we are
 
@@ -42,4 +44,39 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation
 
    ref: http://manual.calibre-ebook.com/creating_plugins.html
 
+   first code in the tutorial involves importing calibre:
+
+   #+begin_src python :eval never
+     import os
+     from calibre.customize import FileTypePlugin
+   #+end_src
+
+   #+RESULTS:
+   : Traceback (most recent call last):
+   :   File "<stdin>", line 7, in <module>
+   :   File "<stdin>", line 4, in main
+   : ImportError: No module named calibre.customize
+   
+   So we need to set up calibre as an importable module...
+
 *** set up our development environment
+
+    ref: http://manual.calibre-ebook.com/develop.html
+
+    let's set up a virtualenv for that.
+
+    #+begin_src sh :eval never
+    virtualenv venv
+    #+end_src
+
+    #+RESULTS:
+    : New python executable in venv/bin/python
+    : Installing setuptools............done.
+    : Installing pip...............done.
+
+    make sure we have a copy of the bazaar code somewhere. skipping this part -- you want to follow develop.html linked above.
+
+    I have it sitting in =~/dev/calibre/calibre-src=; make sure you run =bzr merge= to update it
+
+    
+    
