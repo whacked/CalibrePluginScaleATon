@@ -1,4 +1,5 @@
 #+TITLE: CalibrePluginScaleATon
+#+STYLE: <style>pre.example {font-size: 8pt; border-left: 8pt solid #AEBDCC; }</style>
 
 * CalibrePluginScaleATon
 
@@ -10,7 +11,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 ** where we are
 
-   #+begin_src sh :eval never
+   #+begin_src sh :exports both :eval never
    lsb_release -a
    #+end_src
 
@@ -21,14 +22,14 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
    | Codename:       | precise            |
 
 
-   #+begin_src sh :results output :eval never
+   #+begin_src sh :results output :exports both :eval never
    calibredb --version
    #+end_src
 
    #+RESULTS:
    : calibredb (calibre 0.9.11)
 
-   #+begin_src sh :results output
+   #+begin_src sh :results output :exports both :eval never
    python -c 'import sys; print sys.version_info'
    #+end_src
 
@@ -46,7 +47,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
    first code in the tutorial involves importing calibre:
 
-   #+begin_src python :eval never
+   #+begin_src python :exports both :eval never
      import os
      from calibre.customize import FileTypePlugin
    #+end_src
@@ -65,7 +66,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** set up a virtualenv
 
-     #+begin_src sh :eval never
+     #+begin_src sh :exports both :eval never
      virtualenv venv
      #+end_src
 
@@ -80,7 +81,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
      mine is sitting in =~/dev/calibre/calibre-src=; make sure you run =bzr merge= to update it.
 
-     #+begin_src sh :results output :eval never
+     #+begin_src sh :results output :exports both :eval never
      grep -n numeric_version ~/dev/calibre/calibre-src/src/calibre/constants.py
      #+end_src
 
@@ -90,7 +91,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** =.pth= file hacks for calibre import
 
-     #+begin_src sh :results output :eval never
+     #+begin_src sh :results output :exports both :eval never
      cat venv/lib/python2.7/site-packages/calibre.pth
      #+end_src
 
@@ -102,7 +103,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
      now attempt import calibre
 
-     #+begin_src sh :results output
+     #+begin_src sh :results output :exports both :eval never
      . venv/bin/activate
      python -c 'import calibre'
      #+end_src
@@ -113,7 +114,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** install =PyICU=
 
-     #+begin_src sh :results output :eval never
+     #+begin_src sh :results output :exports both :eval never
      . venv/bin/activate
      pip install PyICU
      #+end_src
@@ -136,7 +137,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
        Cleaning up...
      #+end_example
 
-     #+begin_src sh :results output :eval never
+     #+begin_src sh :results output :exports both :eval never
      . venv/bin/activate
      python -c 'import calibre; print "OK"'
      #+end_src
@@ -148,7 +149,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 *** test out our environment
 
-     #+begin_src sh :results output :eval never
+     #+begin_src sh :results output :exports both :eval never
      . venv/bin/activate
      python -c 'import os; from calibre.customize import FileTypePlugin; print "OK"'
      #+end_src
@@ -158,13 +159,13 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 *** test the HelloWorld plugin
 
-    #+begin_src sh :results silent :eval never
+    #+begin_src sh :results silent :exports both :eval never
     mkdir HelloWorldPlugin
     #+end_src
 
     (run =C-v-t= or =(org-babel-tangle)= to generate this file) 
 
-    #+begin_src python :tangle HelloWorldPlugin/__init__.py :eval never
+    #+begin_src python :tangle HelloWorldPlugin/__init__.py :exports both :eval never
       import os
       from calibre.customize import FileTypePlugin
       
@@ -193,7 +194,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** install the HelloWorld plugin
      
-     #+begin_src sh :results output :eval never
+     #+begin_src sh :results output :exports both :eval never
      calibre-customize -b HelloWorldPlugin
      #+end_src
 
@@ -205,15 +206,15 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 *** Right-click menu plugin
 
-    #+begin_src sh :results silent :eval never
+    #+begin_src sh :results silent :exports both :eval never
     mkdir MyPlugin
     #+end_src
 
-**** plugin-import-name-myplugin.txt
+**** =plugin-import-name-myplugin.txt=
 
      calibre likes this text file to be empty, but I like to put some install memo in it
 
-     #+begin_src txt :tangle MyPlugin/plugin-import-name-myplugin.txt
+     #+begin_src txt :tangle MyPlugin/plugin-import-name-myplugin.txt :exports both :eval never
      calibre-customize -b MyPlugin
      #+end_src
 
@@ -221,7 +222,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** =__init__.py=
 
-     #+begin_src python :tangle MyPlugin/__init__.py
+     #+begin_src python :tangle MyPlugin/__init__.py :exports both :eval never
        from calibre.customize import InterfaceActionBase
        
        class MyPlugin(InterfaceActionBase):
@@ -259,7 +260,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** =ui.py=
 
-     #+begin_src python :tangle MyPlugin/ui.py
+     #+begin_src python :tangle MyPlugin/ui.py :exports both :eval never
        from calibre.gui2.actions import InterfaceAction
        from calibre.gui2 import question_dialog, info_dialog
        
@@ -303,7 +304,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** =config.py=
 
-     #+begin_src python :tangle MyPlugin/config.py
+     #+begin_src python :tangle MyPlugin/config.py :exports both :eval never
        from PyQt4.Qt import QWidget, QHBoxLayout, QLabel, QLineEdit
        
        from calibre.utils.config import JSONConfig
