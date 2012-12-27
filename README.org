@@ -159,12 +159,12 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 *** test the HelloWorld plugin
 
     #+begin_src sh :results silent :eval never
-    mkdir MyPlugin
+    mkdir HelloWorldPlugin
     #+end_src
 
     (run =C-v-t= or =(org-babel-tangle)= to generate this file) 
 
-    #+begin_src python :tangle MyPlugin/__init__.py :eval never
+    #+begin_src python :tangle HelloWorldPlugin/__init__.py :eval never
       import os
       from calibre.customize import FileTypePlugin
       
@@ -194,12 +194,15 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 **** install the HelloWorld plugin
      
      #+begin_src sh :results output :eval never
-     calibre-customize -b MyPlugin
+     calibre-customize -b HelloWorldPlugin
      #+end_src
 
      #+RESULTS:
      : Plugin updated: Hello World Plugin (1, 0, 0)
 
      what that did:
-     [[file:doc/img/ss-001.png]]
+     [[./doc/img/ss-001.png]]
 
+*** Right-click menu plugin
+
+    
