@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>CalibrePluginScaleATon</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="CalibrePluginScaleATon"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-12-27 15:15:07 EST"/>
+<meta name="author" content="natto"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<style>pre.example {font-size: 8pt; border-left: 8pt solid #AEBDCC; }</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">CalibrePluginScaleATon</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 CalibrePluginScaleATon</a></li>
+<li><a href="#sec-2">2 memo</a>
+<ul>
+<li><a href="#sec-2-1">2.1 where we are</a></li>
+<li><a href="#sec-2-2">2.2 where we want to go</a></li>
+<li><a href="#sec-2-3">2.3 version 1</a>
+<ul>
+<li><a href="#sec-2-3-1">2.3.1 set up our development environment</a></li>
+<li><a href="#sec-2-3-2">2.3.2 test out our environment</a></li>
+<li><a href="#sec-2-3-3">2.3.3 test the HelloWorld plugin</a></li>
+<li><a href="#sec-2-3-4">2.3.4 Right-click menu plugin</a></li>
+<li><a href="#sec-2-3-5">2.3.5 Actually getting the right click menu to show up</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> CalibrePluginScaleATon</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+A skeleton that "tries" to be a basis for practical calibre plugin creation.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> memo</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  github's org-mode renderer will not render this correctly!
+</p>
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> where we are</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+
+
+
+<pre class="src src-sh">lsb_release -a
+</pre>
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" />
+</colgroup>
+<tbody>
+<tr><td class="left">Distributor ID:</td><td class="left">Ubuntu</td></tr>
+<tr><td class="left">Description:</td><td class="left">Ubuntu 12.04.1 LTS</td></tr>
+<tr><td class="left">Release:</td><td class="left">12.04</td></tr>
+<tr><td class="left">Codename:</td><td class="left">precise</td></tr>
+</tbody>
+</table>
+
+
+
+
+
+
+<pre class="src src-sh">calibredb --version
+</pre>
+
+
+<pre class="example">
+calibredb (calibre 0.9.11)
+</pre>
+
+
+
+
+
+<pre class="src src-sh">python -c <span style="color: #2aa198;">'import sys; print sys.version_info'</span>
+</pre>
+
+
+<pre class="example">
+sys.version_info(major=2, minor=7, micro=3, releaselevel='final', serial=0)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> where we want to go</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<ul>
+<li>add a menu entry to right click that says "Get info"
+</li>
+<li>when you click it, it prints the dict of the book entry
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> version 1</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>
+   ref: <a href="http://manual.calibre-ebook.com/creating_plugins.html">http://manual.calibre-ebook.com/creating_plugins.html</a>
+</p>
+<p>
+   first code in the tutorial involves importing calibre:
+</p>
+
+
+
+<pre class="src src-python"><span style="color: #859900;">import</span> os
+<span style="color: #859900;">from</span> calibre.customize <span style="color: #859900;">import</span> FileTypePlugin
+</pre>
+
+
+<pre class="example">
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 7, in &lt;module&gt;
+  File "&lt;stdin&gt;", line 4, in main
+ImportError: No module named calibre.customize
+</pre>
+
+
+<p>   
+   So we need to set up calibre as an importable module&hellip;
+</p>
+
+</div>
+
+<div id="outline-container-2-3-1" class="outline-4">
+<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> set up our development environment</h4>
+<div class="outline-text-4" id="text-2-3-1">
+
+
+<p>
+    ref: <a href="http://manual.calibre-ebook.com/develop.html">http://manual.calibre-ebook.com/develop.html</a>
+</p>
+<ul>
+<li id="sec-2-3-1-1">set up a virtualenv<br/>
+
+
+
+
+<pre class="src src-sh">virtualenv venv
+</pre>
+
+
+<pre class="example">
+New python executable in venv/bin/python
+Installing setuptools............done.
+Installing pip...............done.
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-2-3-1-2">get calibre src for python import<br/>
+
+<p>
+     make sure we have a copy of the bazaar code somewhere. skipping this part &ndash; you want to follow develop.html linked above.
+</p>
+<p>
+     mine is sitting in <code>~/dev/calibre/calibre-src</code>; make sure you run <code>bzr merge</code> to update it.
+</p>
+
+
+
+<pre class="src src-sh">grep -n numeric_version ~/dev/calibre/calibre-src/src/calibre/constants.py
+</pre>
+
+
+<pre class="example">
+7:numeric_version = (0, 9, 11)
+8:__version__   = u'.'.join(map(unicode, numeric_version))
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-2-3-1-3"><code>.pth</code> file hacks for calibre import<br/>
+
+
+
+
+<pre class="src src-sh">cat venv/lib/python2.7/site-packages/calibre.pth
+</pre>
+
+
+<pre class="example">
+import os, sys; sys.path.append(os.path.expanduser("~/dev/calibre/calibre-src/src"))
+import os, sys; sys.resources_location = os.path.expanduser("~/dev/calibre/calibre-src/resources")
+import os, sys; sys.extensions_location = os.path.expanduser("~/dev/calibre/calibre-src/src/calibre/plugins")
+import sys; sys.executables_location = "/usr/bin"
+</pre>
+
+
+<p>
+     now attempt import calibre
+</p>
+
+
+
+<pre class="src src-sh"><span style="color: #859900;">.</span> venv/bin/activate
+python -c <span style="color: #2aa198;">'import calibre'</span>
+</pre>
+
+
+<pre class="example">
+Loading ICU failed with:  No module named icu
+Loading ICU failed with:  No module named icu
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-2-3-1-4">install <code>PyICU</code><br/>
+
+
+
+
+<pre class="src src-sh"><span style="color: #859900;">.</span> venv/bin/activate
+pip install PyICU
+</pre>
+
+
+
+     
+
+<pre class="example">Downloading/unpacking PyICU
+  Running setup.py egg_info for package PyICU
+
+Installing collected packages: PyICU
+  Running setup.py install for PyICU
+    building '_icu' extension
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I/usr/include/python2.7 -c numberformat.cpp -o build/temp.linux-x86_64-2.7/numberformat.o -DPYICU_VER="1.5"
+    # ... #
+    # ... # elided
+    # ... #
+    g++ -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro build/temp.linux-x86_64-2.7/numberformat.o build/temp.linux-x86_64-2.7/format.o build/temp.linux-x86_64-2.7/unicodeset.o build/temp.linux-x86_64-2.7/bases.o build/temp.linux-x86_64-2.7/normalizer.o build/temp.linux-x86_64-2.7/tzinfo.o build/temp.linux-x86_64-2.7/layoutengine.o build/temp.linux-x86_64-2.7/charset.o build/temp.linux-x86_64-2.7/locale.o build/temp.linux-x86_64-2.7/iterators.o build/temp.linux-x86_64-2.7/collator.o build/temp.linux-x86_64-2.7/common.o build/temp.linux-x86_64-2.7/calendar.o build/temp.linux-x86_64-2.7/dateformat.o build/temp.linux-x86_64-2.7/search.o build/temp.linux-x86_64-2.7/_icu.o build/temp.linux-x86_64-2.7/regex.o build/temp.linux-x86_64-2.7/transliterator.o build/temp.linux-x86_64-2.7/errors.o -licui18n -licuuc -licudata -licule -o build/lib.linux-x86_64-2.7/_icu.so
+
+Successfully installed PyICU
+Cleaning up...
+</pre>
+
+
+
+<pre class="src src-sh"><span style="color: #859900;">.</span> venv/bin/activate
+python -c <span style="color: #2aa198;">'import calibre; print "OK"'</span>
+</pre>
+
+
+<pre class="example">
+OK
+</pre>
+
+
+<p>
+     there was actually a problem before, where <code>src/calibre/utils/icu.py</code> printed "icu not ok". I placed a <code>print _icu</code> after the <code>if _icu is None</code> test, and the error went away. presumably something was stale and updating it reloaded something else that propagated the fix.
+</p>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-2-3-2" class="outline-4">
+<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> test out our environment</h4>
+<div class="outline-text-4" id="text-2-3-2">
+
+
+
+
+
+<pre class="src src-sh"><span style="color: #859900;">.</span> venv/bin/activate
+python -c <span style="color: #2aa198;">'import os; from calibre.customize import FileTypePlugin; print "OK"'</span>
+</pre>
+
+
+<pre class="example">
+OK
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-3-3" class="outline-4">
+<h4 id="sec-2-3-3"><span class="section-number-4">2.3.3</span> test the HelloWorld plugin</h4>
+<div class="outline-text-4" id="text-2-3-3">
+
+
+
+
+
+<pre class="src src-sh">mkdir HelloWorldPlugin
+</pre>
+
+
+<p>
+    (run <code>C-v-t</code> or <code>(org-babel-tangle)</code> to generate this file) 
+</p>
+
+
+
+<pre class="src src-python"><span style="color: #859900;">import</span> os
+<span style="color: #859900;">from</span> calibre.customize <span style="color: #859900;">import</span> FileTypePlugin
+
+<span style="color: #859900;">class</span> <span style="color: #b58900;">HelloWorld</span>(FileTypePlugin):
+
+    <span style="color: #657b83; background-color: #fdf6e3;">name</span>                = <span style="color: #2aa198;">'Hello World Plugin'</span> <span style="color: #93a1a1; font-style: italic;"># Name of the plugin</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">description</span>         = <span style="color: #2aa198;">'Set the publisher to Hello World for all new conversions'</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">supported_platforms</span> = [<span style="color: #2aa198;">'windows'</span>, <span style="color: #2aa198;">'osx'</span>, <span style="color: #2aa198;">'linux'</span>] <span style="color: #93a1a1; font-style: italic;"># Platforms this plugin will run on</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">author</span>              = <span style="color: #2aa198;">'Acme Inc.'</span> <span style="color: #93a1a1; font-style: italic;"># The author of this plugin</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">version</span>             = (<span style="color: #657b83; background-color: #fdf6e3;">1</span>, <span style="color: #657b83; background-color: #fdf6e3;">0</span>, <span style="color: #657b83; background-color: #fdf6e3;">0</span>)   <span style="color: #93a1a1; font-style: italic;"># The version number of this plugin</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">file_types</span>          =<span style="color: #859900;"> set</span>([<span style="color: #2aa198;">'epub'</span>, <span style="color: #2aa198;">'mobi'</span>]) <span style="color: #93a1a1; font-style: italic;"># The file types that this plugin will be applied to</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">on_postprocess</span>      = <span style="color: #859900;">True</span> <span style="color: #93a1a1; font-style: italic;"># Run this plugin after conversion is complete</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">minimum_calibre_version</span> = (<span style="color: #657b83; background-color: #fdf6e3;">0</span>, <span style="color: #657b83; background-color: #fdf6e3;">7</span>, <span style="color: #657b83; background-color: #fdf6e3;">53</span>)
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">run</span>(<span style="color: #859900;">self</span>, path_to_ebook):
+        <span style="color: #859900;">from</span> calibre.ebooks.metadata.meta <span style="color: #859900;">import</span> get_metadata, set_metadata
+       <span style="color: #859900;"> file</span> =<span style="color: #859900;"> open</span>(path_to_ebook, <span style="color: #2aa198;">'r+b'</span>)
+        <span style="color: #657b83; background-color: #fdf6e3;">ext</span>  = os.path.splitext(path_to_ebook)[-<span style="color: #657b83; background-color: #fdf6e3;">1</span>][<span style="color: #657b83; background-color: #fdf6e3;">1</span>:].lower()
+        <span style="color: #657b83; background-color: #fdf6e3;">mi</span> = get_metadata(file, ext)
+        <span style="color: #657b83; background-color: #fdf6e3;">mi.publisher</span> = <span style="color: #2aa198;">'Hello World'</span>
+        set_metadata(file, mi, ext)
+        <span style="color: #859900;">return</span> path_to_ebook
+</pre>
+
+
+<p>
+    this file should be runnable from the venv command line (producing no output)
+</p>
+<ul>
+<li id="sec-2-3-3-1">install the HelloWorld plugin<br/>
+
+
+
+
+<pre class="src src-sh">calibre-customize -b HelloWorldPlugin
+</pre>
+
+
+<pre class="example">
+Plugin updated: Hello World Plugin (1, 0, 0)
+</pre>
+
+
+<p>
+     what that did:
+     <img src="./doc/img/ss-001.png"  alt="./doc/img/ss-001.png" />
+</p>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-2-3-4" class="outline-4">
+<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> Right-click menu plugin</h4>
+<div class="outline-text-4" id="text-2-3-4">
+
+
+
+
+
+<pre class="src src-sh">mkdir MyPlugin
+</pre>
+
+
+<ul>
+<li id="sec-2-3-4-1"><code>plugin-import-name-myplugin.txt</code><br/>
+
+<p>
+     calibre likes this text file to be empty, but I like to put some install memo in it
+</p>
+
+
+
+<pre class="src src-txt">calibre-customize -b MyPlugin
+</pre>
+
+
+<p>
+     Then you can call <code>sh MyPlugin/*.txt</code> to deploy it locally. For now we'll do this. Later, we might change it to run the <code>zip -r</code> command for bundling
+</p>
+</li>
+</ul>
+<ul>
+<li id="sec-2-3-4-2"><code>__init__.py</code><br/>
+
+
+
+
+<pre class="src src-python"><span style="color: #859900;">from</span> calibre.customize <span style="color: #859900;">import</span> InterfaceActionBase
+
+<span style="color: #859900;">class</span> <span style="color: #b58900;">MyPlugin</span>(InterfaceActionBase):
+
+    <span style="color: #657b83; background-color: #fdf6e3;">name</span>                = <span style="color: #2aa198;">'Right click plugin'</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">description</span>         = <span style="color: #2aa198;">'Create an action menu that appears on right click'</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">supported_platforms</span> = [<span style="color: #2aa198;">'windows'</span>, <span style="color: #2aa198;">'osx'</span>, <span style="color: #2aa198;">'linux'</span>]
+    <span style="color: #657b83; background-color: #fdf6e3;">author</span>              = <span style="color: #2aa198;">'Sir Skeleton'</span>
+    <span style="color: #657b83; background-color: #fdf6e3;">version</span>             = (<span style="color: #657b83; background-color: #fdf6e3;">0</span>, <span style="color: #657b83; background-color: #fdf6e3;">0</span>, <span style="color: #657b83; background-color: #fdf6e3;">1</span>)
+    <span style="color: #657b83; background-color: #fdf6e3;">minimum_calibre_version</span> = (<span style="color: #657b83; background-color: #fdf6e3;">0</span>, <span style="color: #657b83; background-color: #fdf6e3;">7</span>, <span style="color: #657b83; background-color: #fdf6e3;">53</span>)
+
+    <span style="color: #657b83; background-color: #fdf6e3;">actual_plugin</span>       = <span style="color: #2aa198;">'calibre_plugins.myplugin.ui:RightClickPlugin'</span>
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">is_customizable</span>(<span style="color: #859900;">self</span>):
+        <span style="color: #859900;">return</span> <span style="color: #859900;">True</span>
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">config_widget</span>(<span style="color: #859900;">self</span>):
+        <span style="color: #859900;">from</span> calibre_plugins.myplugin.config <span style="color: #859900;">import</span> ConfigWidget
+        <span style="color: #859900;">return</span> ConfigWidget()
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">save_settings</span>(<span style="color: #859900;">self</span>, config_widget):
+        <span style="color: #2aa198;">'''</span>
+<span style="color: #2aa198;">        Save the settings specified by the user with config_widget.</span>
+
+<span style="color: #2aa198;">        :param config_widget: The widget returned by :meth:`config_widget`.</span>
+<span style="color: #2aa198;">        '''</span>
+        config_widget.save_settings()
+
+        <span style="color: #93a1a1; font-style: italic;"># Apply the changes</span>
+        <span style="color: #657b83; background-color: #fdf6e3;">ac</span> = <span style="color: #859900;">self</span>.actual_plugin_
+        <span style="color: #859900;">if</span> <span style="color: #657b83; background-color: #fdf6e3;">ac</span> <span style="color: #859900;">is</span> <span style="color: #859900;">not</span> <span style="color: #859900;">None</span>:
+            <span style="color: #657b83; background-color: #fdf6e3;">ac</span>.apply_settings()
+
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-2-3-4-3"><code>ui.py</code><br/>
+
+
+
+
+<pre class="src src-python"><span style="color: #859900;">from</span> calibre.gui2.actions <span style="color: #859900;">import</span> InterfaceAction
+<span style="color: #859900;">from</span> calibre.gui2 <span style="color: #859900;">import</span> question_dialog, info_dialog
+
+<span style="color: #859900;">class</span> <span style="color: #b58900;">RightClickPlugin</span>(InterfaceAction):
+
+    <span style="color: #657b83; background-color: #fdf6e3;">name</span> = <span style="color: #2aa198;">'Right Click Menu'</span>
+
+    <span style="color: #657b83; background-color: #fdf6e3;">action_spec</span> = (<span style="color: #2aa198;">'Right Click Menu'</span>, <span style="color: #859900;">None</span>,
+                   <span style="color: #2aa198;">'Activate the menu'</span>, <span style="color: #859900;">None</span>) <span style="color: #93a1a1; font-style: italic;"># None = no keyboard shortcut</span>
+
+    <span style="color: #657b83; background-color: #fdf6e3;">action_type</span> = <span style="color: #2aa198;">'current'</span>
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">genesis</span>(<span style="color: #859900;">self</span>):
+        <span style="color: #93a1a1; font-style: italic;"># skip the icon creation</span>
+        <span style="color: #93a1a1; font-style: italic;"># icon = get_icons('images/icon.png')</span>
+        <span style="color: #93a1a1; font-style: italic;"># self.qaction.setIcon(icon)</span>
+        <span style="color: #859900;">self</span>.qaction.triggered.connect(<span style="color: #859900;">self</span>.show_dialog)
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">show_dialog</span>(<span style="color: #859900;">self</span>):
+        <span style="color: #93a1a1; font-style: italic;"># The base plugin object defined in __init__.py</span>
+        <span style="color: #657b83; background-color: #fdf6e3;">base_plugin_object</span> = <span style="color: #859900;">self</span>.interface_action_base_plugin
+        <span style="color: #93a1a1; font-style: italic;"># Show the config dialog</span>
+        <span style="color: #93a1a1; font-style: italic;"># The config dialog can also be shown from within</span>
+        <span style="color: #93a1a1; font-style: italic;"># Preferences-&gt;Plugins, which is why the do_user_config</span>
+        <span style="color: #93a1a1; font-style: italic;"># method is defined on the base plugin class</span>
+        <span style="color: #657b83; background-color: #fdf6e3;">do_user_config</span> = base_plugin_object.do_user_config
+
+        <span style="color: #93a1a1; font-style: italic;"># self.gui is the main calibre GUI. It acts as the gateway to access</span>
+        <span style="color: #93a1a1; font-style: italic;"># all the elements of the calibre user interface, it should also be the</span>
+        <span style="color: #93a1a1; font-style: italic;"># parent of the dialog</span>
+        <span style="color: #93a1a1; font-style: italic;"># TODO: add book info</span>
+        info_dialog(<span style="color: #859900;">self</span>.gui, <span style="color: #2aa198;">"Item info"</span>,<span style="color: #859900;"> str</span>(<span style="color: #2aa198;">"TODO: add book info"</span>), show=<span style="color: #859900;">True</span>)
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">apply_settings</span>(<span style="color: #859900;">self</span>):
+        <span style="color: #859900;">from</span> calibre_plugins.myplugin.config <span style="color: #859900;">import</span> prefs
+        <span style="color: #93a1a1; font-style: italic;"># In an actual non trivial plugin, you would probably need to</span>
+        <span style="color: #93a1a1; font-style: italic;"># do something based on the settings in prefs</span>
+        prefs
+
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-2-3-4-4"><code>config.py</code><br/>
+
+
+
+
+<pre class="src src-python"><span style="color: #859900;">from</span> PyQt4.Qt <span style="color: #859900;">import</span> QWidget, QHBoxLayout, QLabel, QLineEdit
+
+<span style="color: #859900;">from</span> calibre.utils.config <span style="color: #859900;">import</span> JSONConfig
+
+<span style="color: #93a1a1; font-style: italic;"># </span><span style="color: #93a1a1; font-style: italic;">You should always prefix your config file name with plugins/,</span>
+<span style="color: #93a1a1; font-style: italic;"># </span><span style="color: #93a1a1; font-style: italic;">so as to ensure you dont accidentally clobber a calibre config file</span>
+<span style="color: #657b83; background-color: #fdf6e3;">prefs</span> = JSONConfig(<span style="color: #2aa198;">'plugins/myplugin'</span>)
+
+<span style="color: #93a1a1; font-style: italic;"># </span><span style="color: #93a1a1; font-style: italic;">Set defaults</span>
+<span style="color: #657b83; background-color: #fdf6e3;">prefs.defaults</span>[<span style="color: #2aa198;">'my_msg_header'</span>] = <span style="color: #2aa198;">'Your book info:'</span>
+
+<span style="color: #859900;">class</span> <span style="color: #b58900;">ConfigWidget</span>(QWidget):
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">__init__</span>(<span style="color: #859900;">self</span>):
+        QWidget.__init__(<span style="color: #859900;">self</span>)
+        <span style="color: #859900;">self</span>.l = QHBoxLayout()
+        <span style="color: #859900;">self</span>.setLayout(<span style="color: #859900;">self</span>.l)
+
+        <span style="color: #859900;">self</span>.label = QLabel(<span style="color: #2aa198;">'Message header:'</span>)
+        <span style="color: #859900;">self</span>.l.addWidget(<span style="color: #859900;">self</span>.label)
+
+        <span style="color: #859900;">self</span>.msg = QLineEdit(<span style="color: #859900;">self</span>)
+        <span style="color: #859900;">self</span>.msg.setText(prefs[<span style="color: #2aa198;">'my_msg_header'</span>])
+        <span style="color: #859900;">self</span>.l.addWidget(<span style="color: #859900;">self</span>.msg)
+        <span style="color: #859900;">self</span>.label.setBuddy(<span style="color: #859900;">self</span>.msg)
+
+    <span style="color: #859900;">def</span> <span style="color: #268bd2;">save_settings</span>(<span style="color: #859900;">self</span>):
+        <span style="color: #657b83; background-color: #fdf6e3;">prefs</span>[<span style="color: #2aa198;">'my_msg_header'</span>] =<span style="color: #859900;"> unicode</span>(<span style="color: #859900;">self</span>.msg.text())
+</pre>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-2-3-5" class="outline-4">
+<h4 id="sec-2-3-5"><span class="section-number-4">2.3.5</span> Actually getting the right click menu to show up</h4>
+<div class="outline-text-4" id="text-2-3-5">
+
+
+<p>
+    turns out, there isn't an API to create a context menu. You add it via:
+</p>
+<ol>
+<li><b>Preferences</b> 
+<ul>
+<li><img src="./doc/img/ss-002.png"  alt="./doc/img/ss-002.png" />
+
+</li>
+</ul>
+
+</li>
+<li><b>Toolbar</b> 
+<ul>
+<li><img src="./doc/img/ss-003.png"  alt="./doc/img/ss-003.png" />
+
+</li>
+</ul>
+
+</li>
+<li><b>&hellip; books in the calibre library</b> 
+<ul>
+<li><img src="./doc/img/ss-004.png"  alt="./doc/img/ss-004.png" />
+
+</li>
+</ul>
+
+</li>
+<li>and move it to the right pane. 
+<ul>
+<li><img src="./doc/img/ss-005.png"  alt="./doc/img/ss-005.png" />
+</li>
+</ul>
+
+</li>
+</ol>
+
+
+<ul>
+<li id="sec-2-3-5-1">testing the right click menu<br/>
+
+<p>
+     now a right click gives this menu:
+</p>
+<p>
+     <img src="./doc/img/ss-006.png"  alt="./doc/img/ss-006.png" />
+</p>
+<p>
+     with this popup:
+</p>
+<p>
+     <img src="./doc/img/ss-007.png"  alt="./doc/img/ss-007.png" />
+</p>
+
+
+<p>
+     next&hellip; we need to replace the TODO with the book info.
+</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2012-12-27 15:15:07 EST</p>
+<p class="author">Author: natto</p>
+<p class="creator">Org version 7.8.11 with Emacs version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
