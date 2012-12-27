@@ -97,7 +97,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      #+RESULTS:
      : import os, sys; sys.path.append(os.path.expanduser("~/dev/calibre/calibre-src/src"))
      : import os, sys; sys.resources_location = os.path.expanduser("~/dev/calibre/calibre-src/resources")
-     : import os, sys; sys.extensions_location = os.path.abspath("~/dev/calibre/calibre-src/src/calibre/plugins")
+     : import os, sys; sys.extensions_location = os.path.expanduser("~/dev/calibre/calibre-src/src/calibre/plugins")
      : import sys; sys.executables_location = "/usr/bin"
 
      now attempt import calibre
