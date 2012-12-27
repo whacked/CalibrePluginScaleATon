@@ -349,3 +349,16 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
     [[./doc/img/ss-005.png]]
 
     
+**** testing the right click menu
+
+     now a right click gives this menu:
+
+     [[./doc/img/ss-006.png]]
+
+     with this popup:
+
+     [[./doc/img/ss-007.png]]
+    
+
+
+     next... we need to replace the TODO with the book info.
