@@ -136,7 +136,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
        Cleaning up...
      #+end_example
 
-     #+begin_src sh :results output
+     #+begin_src sh :results output :eval never
      . venv/bin/activate
      python -c 'import calibre; print "OK"'
      #+end_src
@@ -148,4 +148,58 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 *** test out our environment
 
-    
+     #+begin_src sh :results output :eval never
+     . venv/bin/activate
+     python -c 'import os; from calibre.customize import FileTypePlugin; print "OK"'
+     #+end_src
+
+     #+RESULTS:
+     : OK
+
+*** test the HelloWorld plugin
+
+    #+begin_src sh :results silent :eval never
+    mkdir MyPlugin
+    #+end_src
+
+    (run =C-v-t= or =(org-babel-tangle)= to generate this file) 
+
+    #+begin_src python :tangle MyPlugin/__init__.py :eval never
+      import os
+      from calibre.customize import FileTypePlugin
+      
+      class HelloWorld(FileTypePlugin):
+      
+          name                = 'Hello World Plugin' # Name of the plugin
+          description         = 'Set the publisher to Hello World for all new conversions'
+          supported_platforms = ['windows', 'osx', 'linux'] # Platforms this plugin will run on
+          author              = 'Acme Inc.' # The author of this plugin
+          version             = (1, 0, 0)   # The version number of this plugin
+          file_types          = set(['epub', 'mobi']) # The file types that this plugin will be applied to
+          on_postprocess      = True # Run this plugin after conversion is complete
+          minimum_calibre_version = (0, 7, 53)
+      
+          def run(self, path_to_ebook):
+              from calibre.ebooks.metadata.meta import get_metadata, set_metadata
+              file = open(path_to_ebook, 'r+b')
+              ext  = os.path.splitext(path_to_ebook)[-1][1:].lower()
+              mi = get_metadata(file, ext)
+              mi.publisher = 'Hello World'
+              set_metadata(file, mi, ext)
+              return path_to_ebook
+    #+end_src
+
+    this file should be runnable from the venv command line (producing no output)
+
+**** install the HelloWorld plugin
+     
+     #+begin_src sh :results output :eval never
+     calibre-customize -b MyPlugin
+     #+end_src
+
+     #+RESULTS:
+     : Plugin updated: Hello World Plugin (1, 0, 0)
+
+     what that did:
+     [[file:doc/img/ss-001.png]]
+
