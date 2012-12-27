@@ -205,4 +205,99 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 *** Right-click menu plugin
 
-    
+    #+begin_src sh :results silent :eval never
+    mkdir MyPlugin
+    #+end_src
+
+**** plugin-import-name-myplugin.txt
+
+     calibre likes this text file to be empty, but I like to put some install memo in it
+
+     #+begin_src txt :tangle MyPlugin/plugin-import-name-myplugin.txt
+     calibre-customize -b MyPlugin
+     #+end_src
+
+     Then you can call =sh MyPlugin/*.txt= to deploy it locally. For now we'll do this. Later, we might change it to run the =zip -r= command for bundling
+
+**** __init__.py
+
+     #+begin_src python :tangle MyPlugin/__init__.py
+       from calibre.customize import InterfaceActionBase
+       
+       class MyPlugin(InterfaceActionBase):
+       
+           name                = 'Right click plugin'
+           description         = 'Create an action menu that appears on right click'
+           supported_platforms = ['windows', 'osx', 'linux']
+           author              = 'Sir Skeleton'
+           version             = (0, 0, 1)
+           minimum_calibre_version = (0, 7, 53)
+       
+           actual_plugin       = 'calibre_plugins.myplugin.ui:RightClickPlugin'
+       
+           def is_customizable(self):
+               # disable this for now
+               return False
+       
+           def config_widget(self):
+               from calibre_plugins.myplugin.config import ConfigWidget
+               return ConfigWidget()
+       
+           def save_settings(self, config_widget):
+               '''
+               Save the settings specified by the user with config_widget.
+       
+               :param config_widget: The widget returned by :meth:`config_widget`.
+               '''
+               config_widget.save_settings()
+       
+               # Apply the changes
+               ac = self.actual_plugin_
+               if ac is not None:
+                   ac.apply_settings()
+               
+     #+end_src
+
+**** ui.py
+
+     #+begin_src python :tangle MyPlugin/ui.py
+       from calibre.gui2.actions import InterfaceAction
+       from calibre.gui2 import question_dialog, info_dialog
+       from calibre_plugins.myplugin.main import 
+       
+       class RightClickPlugin(InterfaceAction):
+       
+           name = 'Right Click Menu'
+       
+           action_spec = ('Right Click Menu', None,
+                          'Activate the menu', None) # None = no keyboard shortcut
+       
+           def genesis(self):
+               # skip the icon creation
+               # icon = get_icons('images/icon.png')
+               # self.qaction.setIcon(icon)
+               self.qaction.triggered.connect(self.show_dialog)
+       
+           def show_dialog(self):
+               # The base plugin object defined in __init__.py
+               base_plugin_object = self.interface_action_base_plugin
+               # Show the config dialog
+               # The config dialog can also be shown from within
+               # Preferences->Plugins, which is why the do_user_config
+               # method is defined on the base plugin class
+               do_user_config = base_plugin_object.do_user_config
+       
+               # self.gui is the main calibre GUI. It acts as the gateway to access
+               # all the elements of the calibre user interface, it should also be the
+               # parent of the dialog
+               # TODO: add book info
+               info_dialog(self.gui, "Item info", str("TODO: add book info"), show=True)
+       
+           def apply_settings(self):
+               from calibre_plugins.interface_demo.config import prefs
+               # In an actual non trivial plugin, you would probably need to
+               # do something based on the settings in prefs
+               prefs
+       
+     #+end_src
+
