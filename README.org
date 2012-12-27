@@ -111,3 +111,41 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      : Loading ICU failed with:  No module named icu
      : Loading ICU failed with:  No module named icu
 
+**** install =PyICU=
+
+     #+begin_src sh :results output :eval never
+     . venv/bin/activate
+     pip install PyICU
+     #+end_src
+
+     #+RESULTS:
+     #+begin_example
+       Downloading/unpacking PyICU
+         Running setup.py egg_info for package PyICU
+       
+       Installing collected packages: PyICU
+         Running setup.py install for PyICU
+           building '_icu' extension
+           gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I/usr/include/python2.7 -c numberformat.cpp -o build/temp.linux-x86_64-2.7/numberformat.o -DPYICU_VER="1.5"
+           # ... #
+           # ... # elided
+           # ... #
+           g++ -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro build/temp.linux-x86_64-2.7/numberformat.o build/temp.linux-x86_64-2.7/format.o build/temp.linux-x86_64-2.7/unicodeset.o build/temp.linux-x86_64-2.7/bases.o build/temp.linux-x86_64-2.7/normalizer.o build/temp.linux-x86_64-2.7/tzinfo.o build/temp.linux-x86_64-2.7/layoutengine.o build/temp.linux-x86_64-2.7/charset.o build/temp.linux-x86_64-2.7/locale.o build/temp.linux-x86_64-2.7/iterators.o build/temp.linux-x86_64-2.7/collator.o build/temp.linux-x86_64-2.7/common.o build/temp.linux-x86_64-2.7/calendar.o build/temp.linux-x86_64-2.7/dateformat.o build/temp.linux-x86_64-2.7/search.o build/temp.linux-x86_64-2.7/_icu.o build/temp.linux-x86_64-2.7/regex.o build/temp.linux-x86_64-2.7/transliterator.o build/temp.linux-x86_64-2.7/errors.o -licui18n -licuuc -licudata -licule -o build/lib.linux-x86_64-2.7/_icu.so
+       
+       Successfully installed PyICU
+       Cleaning up...
+     #+end_example
+
+     #+begin_src sh :results output
+     . venv/bin/activate
+     python -c 'import calibre; print "OK"'
+     #+end_src
+
+     #+RESULTS:
+     : OK
+
+     there was actually a problem before, where =src/calibre/utils/icu.py= printed "icu not ok". I placed a =print _icu= after the =if _icu is None= test, and the error went away. presumably something was stale and updating it reloaded something else that propagated the fix.
+
+*** test out our environment
+
+    
