@@ -219,7 +219,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
      Then you can call =sh MyPlugin/*.txt= to deploy it locally. For now we'll do this. Later, we might change it to run the =zip -r= command for bundling
 
-**** __init__.py
+**** =__init__.py=
 
      #+begin_src python :tangle MyPlugin/__init__.py
        from calibre.customize import InterfaceActionBase
@@ -257,7 +257,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
                
      #+end_src
 
-**** ui.py
+**** =ui.py=
 
      #+begin_src python :tangle MyPlugin/ui.py
        from calibre.gui2.actions import InterfaceAction
@@ -301,7 +301,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
        
      #+end_src
 
-**** config.py
+**** =config.py=
 
      #+begin_src python :tangle MyPlugin/config.py
        from PyQt4.Qt import QWidget, QHBoxLayout, QLabel, QLineEdit
@@ -336,18 +336,19 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 *** Actually getting the right click menu to show up
 
-    turns out, there isn't an API to create a context menu. You add it via *Preferences*...
-    [[./doc/img/ss-002.png]]
+    turns out, there isn't an API to create a context menu. You add it via:
 
-    *Toolbar*...
-    [[./doc/img/ss-003.png]]
+    1. *Preferences* 
+      - [[./doc/img/ss-002.png]]
 
-    ...*books in the calibre library*...
-    [[./doc/img/ss-004.png]]
+    2. *Toolbar* 
+      - [[./doc/img/ss-003.png]]
 
-    and move it to the right pane.
-    [[./doc/img/ss-005.png]]
+    3. *... books in the calibre library* 
+      - [[./doc/img/ss-004.png]]
 
+    4. and move it to the right pane. 
+      - [[./doc/img/ss-005.png]]
     
 **** testing the right click menu
 
