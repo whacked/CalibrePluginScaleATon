@@ -31,6 +31,24 @@ class RightClickPlugin(InterfaceAction):
         # parent of the dialog
         # TODO: add book info
         info_dialog(self.gui, "Item info", str("TODO: add book info"), show=True)
+        
+        # here's the telnet manhole
+        from twisted.internet import reactor
+        from twisted.manhole import telnet
+        
+        context = locals()
+        context['gui'] = self.gui
+        
+        def createShellServer():
+            factory = telnet.ShellFactory()
+            port = reactor.listenTCP(2222, factory)
+            factory.namespace = context
+            factory.username = ''
+            factory.password = ''
+            return port
+       
+        reactor.callWhenRunning(createShellServer)
+        reactor.run()
 
     def apply_settings(self):
         from calibre_plugins.myplugin.config import prefs

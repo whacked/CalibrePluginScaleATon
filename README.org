@@ -204,6 +204,91 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      what that did:
      [[./doc/img/ss-001.png]]
 
+*** how to poke around in the REPL
+
+    we want to play with =self.gui= within the =InterfaceAction= class method
+
+    looking around, there are a couple ways of achieving this:
+    - ingress :: http://pypi.python.org/pypi/ingress/0.1.1
+                 didn't try this
+    - ipython :: http://stackoverflow.com/questions/11513132/embedding-ipython-qt-console-in-a-pyqt-application
+                 tried this. unable to find good workaround for =ValueError: API 'QString' has already been set to version 1=
+    - twisted.manhole :: this worked, covered below
+
+**** force calibre to use system-wide python
+
+     I skipped a =pip= install for =twisted=. But you will still need to hack =calibre= to force it to load external libraries.
+
+     firstly, when you start =calibre-debug= you need to set the =CALIBRE_DEVELOP_FROM= variable.
+
+     without modifying the virtualenv init script, this ad-hoc call works:
+     
+     #+begin_src sh :eval never :exports both :eval never
+     CALIBRE_DEVELOP_FROM=../calibre-src/src calibre-debug -g
+     #+end_src
+
+     but if we put e.g. =import twisted= at the top of =calibre-src/src/calibre/__init__.py= and run that, we get:
+
+     #+begin_src sh :results output :exports both :eval never
+     CALIBRE_DEVELOP_FROM=../calibre-src/src calibre-debug -g
+     #+end_src
+
+     #+RESULTS:
+     : ...
+     : ImportError: No module named twisted
+     : 
+
+     I just hacked the =sys.path= directly:
+
+     #+begin_src sh :results output :exports both :eval never
+     head ../calibre-src/src/calibre/__init__.py
+     #+end_src
+
+     #+RESULTS:
+     #+begin_example
+     import sys
+     print "this is the modified __init__.py in calibre-src"
+     print sys.version
+
+     sys.path.extend(['/usr/lib/python2.7',
+                      '/usr/lib/python2.7/dist-packages',
+                      '/usr/local/lib/python2.7/dist-packages',
+                      ])
+     import twisted
+
+     #+end_example
+
+     then it starts, and you can =import twisted= from within the plugin.
+
+     then modify the plugin to launch a telnet manhole 
+
+**** using the manhole
+
+     Start =calibre-debug= and click our plugin menu from the context menu. After you dismiss the popup window, calibre freezes as the telnet server launches.
+
+     At this point, you can =telnet= into our server, hit =ENTER= past the username/password, and poke around:
+
+     #+begin_src sh :eval never
+        ➭ rlwrap telnet localhost 2222
+       Trying ::1...
+       Trying 127.0.0.1...
+       Connected to localhost.
+       Escape character is '^]'.
+       
+       twisted.manhole.telnet.ShellFactory
+       Twisted 11.1.0
+       username: 
+       password: *****
+       >>> gui
+       <calibre.gui2.ui.Main object at 0x7f16b41cb710>
+       >>> reactor.stop()
+       Connection closed by foreign host.
+        ➭ 
+       
+     #+end_src
+     
+     calling =reactor.stop()= cedes control back to calibre. You can also =Ctrl-C= from the terminal where you launched calibre.
+
 *** Right-click menu plugin
 
     #+begin_src sh :results silent :exports both :eval never
@@ -260,6 +345,8 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** =ui.py=
 
+     ref: http://blog.vrplumber.com/index.php?/archives/1631-Minimal-example-of-using-twisted.manhole-Since-it-took-me-so-long-to-get-it-working....html
+
      #+begin_src python :tangle MyPlugin/ui.py :exports both :eval never
        from calibre.gui2.actions import InterfaceAction
        from calibre.gui2 import question_dialog, info_dialog
@@ -272,7 +359,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
                           'Activate the menu', None) # None = no keyboard shortcut
        
            action_type = 'current'
-
+       
            def genesis(self):
                # skip the icon creation
                # icon = get_icons('images/icon.png')
@@ -293,6 +380,23 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
                # parent of the dialog
                # TODO: add book info
                info_dialog(self.gui, "Item info", str("TODO: add book info"), show=True)
+               
+               # here's the telnet manhole
+               from twisted.internet import reactor
+               from twisted.manhole import telnet
+               
+               context = locals()
+               
+               def createShellServer():
+                   factory = telnet.ShellFactory()
+                   port = reactor.listenTCP(2222, factory)
+                   factory.namespace = context
+                   factory.username = ''
+                   factory.password = ''
+                   return port
+              
+               reactor.callWhenRunning(createShellServer)
+               reactor.run()
        
            def apply_settings(self):
                from calibre_plugins.myplugin.config import prefs

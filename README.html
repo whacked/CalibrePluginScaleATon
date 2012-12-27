@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>CalibrePluginScaleATon</title>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <meta name="title" content="CalibrePluginScaleATon"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-12-27 15:15:07 EST"/>
+<meta name="generated" content="2012-12-27 18:50:45 EST"/>
 <meta name="author" content="natto"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -109,8 +109,9 @@
 <li><a href="#sec-2-3-1">2.3.1 set up our development environment</a></li>
 <li><a href="#sec-2-3-2">2.3.2 test out our environment</a></li>
 <li><a href="#sec-2-3-3">2.3.3 test the HelloWorld plugin</a></li>
-<li><a href="#sec-2-3-4">2.3.4 Right-click menu plugin</a></li>
-<li><a href="#sec-2-3-5">2.3.5 Actually getting the right click menu to show up</a></li>
+<li><a href="#sec-2-3-4">2.3.4 how to poke around in the REPL</a></li>
+<li><a href="#sec-2-3-5">2.3.5 Right-click menu plugin</a></li>
+<li><a href="#sec-2-3-6">2.3.6 Actually getting the right click menu to show up</a></li>
 </ul>
 </li>
 </ul>
@@ -479,8 +480,140 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 </div>
 
 <div id="outline-container-2-3-4" class="outline-4">
-<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> Right-click menu plugin</h4>
+<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> how to poke around in the REPL</h4>
 <div class="outline-text-4" id="text-2-3-4">
+
+
+<p>
+    we want to play with <code>self.gui</code> within the <code>InterfaceAction</code> class method
+</p>
+<p>
+    looking around, there are a couple ways of achieving this:
+</p><dl>
+<dt>ingress</dt><dd><a href="http://pypi.python.org/pypi/ingress/0.1.1">http://pypi.python.org/pypi/ingress/0.1.1</a>
+                 didn't try this
+</dd>
+<dt>ipython</dt><dd><a href="http://stackoverflow.com/questions/11513132/embedding-ipython-qt-console-in-a-pyqt-application">http://stackoverflow.com/questions/11513132/embedding-ipython-qt-console-in-a-pyqt-application</a>
+                 tried this. unable to find good workaround for <code>ValueError: API 'QString' has already been set to version 1</code>
+</dd>
+<dt>twisted.manhole</dt><dd>this worked, covered below
+</dd>
+</dl>
+
+
+<ul>
+<li id="sec-2-3-4-1">force calibre to use system-wide python<br/>
+
+<p>
+     I skipped a <code>pip</code> install for <code>twisted</code>. But you will still need to hack <code>calibre</code> to force it to load external libraries.
+</p>
+<p>
+     firstly, when you start <code>calibre-debug</code> you need to set the <code>CALIBRE_DEVELOP_FROM</code> variable.
+</p>
+<p>
+     without modifying the virtualenv init script, this ad-hoc call works:
+</p>
+
+
+
+<pre class="src src-sh"><span style="color: #268bd2;">CALIBRE_DEVELOP_FROM</span>=../calibre-src/src calibre-debug -g
+</pre>
+
+
+<p>
+     but if we put e.g. <code>import twisted</code> at the top of <code>calibre-src/src/calibre/__init__.py</code> and run that, we get:
+</p>
+
+
+
+<pre class="src src-sh"><span style="color: #268bd2;">CALIBRE_DEVELOP_FROM</span>=../calibre-src/src calibre-debug -g
+</pre>
+
+
+<pre class="example">
+...
+ImportError: No module named twisted
+
+</pre>
+
+
+<p>
+     I just hacked the <code>sys.path</code> directly:
+</p>
+
+
+
+<pre class="src src-sh">head ../calibre-src/src/calibre/__init__.py
+</pre>
+
+
+
+     
+
+<pre class="example">import sys
+print "this is the modified __init__.py in calibre-src"
+print sys.version
+
+sys.path.extend(['/usr/lib/python2.7',
+                 '/usr/lib/python2.7/dist-packages',
+                 '/usr/local/lib/python2.7/dist-packages',
+                 ])
+import twisted
+
+</pre>
+
+
+<p>
+     then it starts, and you can <code>import twisted</code> from within the plugin.
+</p>
+<p>
+     then modify the plugin to launch a telnet manhole 
+</p>
+</li>
+</ul>
+<ul>
+<li id="sec-2-3-4-2">using the manhole<br/>
+
+<p>
+     Start <code>calibre-debug</code> and click our plugin menu from the context menu. After you dismiss the popup window, calibre freezes as the telnet server launches.
+</p>
+<p>
+     At this point, you can <code>telnet</code> into our server, hit <code>ENTER</code> past the username/password, and poke around:
+</p>
+
+
+
+<pre class="src src-sh"> &#10157; rlwrap telnet localhost 2222
+Trying ::1...
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is <span style="color: #2aa198;">'^]'</span>.
+
+twisted.manhole.telnet.ShellFactory
+Twisted 11.1.0
+username: 
+password: *****
+&gt;&gt;&gt; gui
+&lt;calibre.gui2.ui.Main object at 0x7f16b41cb710&gt;
+&gt;&gt;&gt; reactor.stop()
+Connection closed by foreign host.
+ &#10157; 
+
+</pre>
+
+
+<p>     
+     calling <code>reactor.stop()</code> cedes control back to calibre. You can also <code>Ctrl-C</code> from the terminal where you launched calibre.
+</p>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-2-3-5" class="outline-4">
+<h4 id="sec-2-3-5"><span class="section-number-4">2.3.5</span> Right-click menu plugin</h4>
+<div class="outline-text-4" id="text-2-3-5">
 
 
 
@@ -491,7 +624,7 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 
 
 <ul>
-<li id="sec-2-3-4-1"><code>plugin-import-name-myplugin.txt</code><br/>
+<li id="sec-2-3-5-1"><code>plugin-import-name-myplugin.txt</code><br/>
 
 <p>
      calibre likes this text file to be empty, but I like to put some install memo in it
@@ -509,7 +642,7 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 </li>
 </ul>
 <ul>
-<li id="sec-2-3-4-2"><code>__init__.py</code><br/>
+<li id="sec-2-3-5-2"><code>__init__.py</code><br/>
 
 
 
@@ -553,8 +686,11 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 </li>
 </ul>
 <ul>
-<li id="sec-2-3-4-3"><code>ui.py</code><br/>
+<li id="sec-2-3-5-3"><code>ui.py</code><br/>
 
+<p>
+     ref: <a href="http://blog.vrplumber.com/index.php?/archives/1631-Minimal-example-of-using-twisted.manhole-Since-it-took-me-so-long-to-get-it-working....html">http://blog.vrplumber.com/index.php?/archives/1631-Minimal-example-of-using-twisted.manhole-Since-it-took-me-so-long-to-get-it-working&hellip;.html</a>
+</p>
 
 
 
@@ -591,6 +727,23 @@ Plugin updated: Hello World Plugin (1, 0, 0)
         <span style="color: #93a1a1; font-style: italic;"># TODO: add book info</span>
         info_dialog(<span style="color: #859900;">self</span>.gui, <span style="color: #2aa198;">"Item info"</span>,<span style="color: #859900;"> str</span>(<span style="color: #2aa198;">"TODO: add book info"</span>), show=<span style="color: #859900;">True</span>)
 
+        <span style="color: #93a1a1; font-style: italic;"># here's the telnet manhole</span>
+        <span style="color: #859900;">from</span> twisted.internet <span style="color: #859900;">import</span> reactor
+        <span style="color: #859900;">from</span> twisted.manhole <span style="color: #859900;">import</span> telnet
+
+        <span style="color: #657b83; background-color: #fdf6e3;">context</span> =<span style="color: #859900;"> locals</span>()
+
+        <span style="color: #859900;">def</span> <span style="color: #268bd2;">createShellServer</span>():
+            <span style="color: #657b83; background-color: #fdf6e3;">factory</span> = telnet.ShellFactory()
+            <span style="color: #657b83; background-color: #fdf6e3;">port</span> = reactor.listenTCP(<span style="color: #657b83; background-color: #fdf6e3;">2222</span>, factory)
+            <span style="color: #657b83; background-color: #fdf6e3;">factory.namespace</span> = context
+            <span style="color: #657b83; background-color: #fdf6e3;">factory.username</span> = <span style="color: #2aa198;">''</span>
+            <span style="color: #657b83; background-color: #fdf6e3;">factory.password</span> = <span style="color: #2aa198;">''</span>
+            <span style="color: #859900;">return</span> port
+
+        reactor.callWhenRunning(createShellServer)
+        reactor.run()
+
     <span style="color: #859900;">def</span> <span style="color: #268bd2;">apply_settings</span>(<span style="color: #859900;">self</span>):
         <span style="color: #859900;">from</span> calibre_plugins.myplugin.config <span style="color: #859900;">import</span> prefs
         <span style="color: #93a1a1; font-style: italic;"># In an actual non trivial plugin, you would probably need to</span>
@@ -603,7 +756,7 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 </li>
 </ul>
 <ul>
-<li id="sec-2-3-4-4"><code>config.py</code><br/>
+<li id="sec-2-3-5-4"><code>config.py</code><br/>
 
 
 
@@ -645,9 +798,9 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 
 </div>
 
-<div id="outline-container-2-3-5" class="outline-4">
-<h4 id="sec-2-3-5"><span class="section-number-4">2.3.5</span> Actually getting the right click menu to show up</h4>
-<div class="outline-text-4" id="text-2-3-5">
+<div id="outline-container-2-3-6" class="outline-4">
+<h4 id="sec-2-3-6"><span class="section-number-4">2.3.6</span> Actually getting the right click menu to show up</h4>
+<div class="outline-text-4" id="text-2-3-6">
 
 
 <p>
@@ -689,7 +842,7 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 
 
 <ul>
-<li id="sec-2-3-5-1">testing the right click menu<br/>
+<li id="sec-2-3-6-1">testing the right click menu<br/>
 
 <p>
      now a right click gives this menu:
@@ -716,7 +869,7 @@ Plugin updated: Hello World Plugin (1, 0, 0)
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-12-27 15:15:07 EST</p>
+<p class="date">Date: 2012-12-27 18:50:45 EST</p>
 <p class="author">Author: natto</p>
 <p class="creator">Org version 7.8.11 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
