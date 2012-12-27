@@ -63,20 +63,51 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
     ref: http://manual.calibre-ebook.com/develop.html
 
-    let's set up a virtualenv for that.
+**** set up a virtualenv
 
-    #+begin_src sh :eval never
-    virtualenv venv
-    #+end_src
+     #+begin_src sh :eval never
+     virtualenv venv
+     #+end_src
 
-    #+RESULTS:
-    : New python executable in venv/bin/python
-    : Installing setuptools............done.
-    : Installing pip...............done.
+     #+RESULTS:
+     : New python executable in venv/bin/python
+     : Installing setuptools............done.
+     : Installing pip...............done.
 
-    make sure we have a copy of the bazaar code somewhere. skipping this part -- you want to follow develop.html linked above.
+**** get calibre src for python import
 
-    I have it sitting in =~/dev/calibre/calibre-src=; make sure you run =bzr merge= to update it
+     make sure we have a copy of the bazaar code somewhere. skipping this part -- you want to follow develop.html linked above.
 
-    
-    
+     mine is sitting in =~/dev/calibre/calibre-src=; make sure you run =bzr merge= to update it.
+
+     #+begin_src sh :results output :eval never
+     grep -n numeric_version ~/dev/calibre/calibre-src/src/calibre/constants.py
+     #+end_src
+
+     #+RESULTS:
+     : 7:numeric_version = (0, 9, 11)
+     : 8:__version__   = u'.'.join(map(unicode, numeric_version))
+
+**** =.pth= file hacks for calibre import
+
+     #+begin_src sh :results output :eval never
+     cat venv/lib/python2.7/site-packages/calibre.pth
+     #+end_src
+
+     #+RESULTS:
+     : import os, sys; sys.path.append(os.path.expanduser("~/dev/calibre/calibre-src/src"))
+     : import os, sys; sys.resources_location = os.path.expanduser("~/dev/calibre/calibre-src/resources")
+     : import os, sys; sys.extensions_location = os.path.abspath("~/dev/calibre/calibre-src/src/calibre/plugins")
+     : import sys; sys.executables_location = "/usr/bin"
+
+     now attempt import calibre
+
+     #+begin_src sh :results output
+     . venv/bin/activate
+     python -c 'import calibre'
+     #+end_src
+
+     #+RESULTS:
+     : Loading ICU failed with:  No module named icu
+     : Loading ICU failed with:  No module named icu
+
