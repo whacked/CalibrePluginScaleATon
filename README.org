@@ -333,3 +333,19 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
            def save_settings(self):
                prefs['my_msg_header'] = unicode(self.msg.text())
      #+end_src
+
+*** Actually getting the right click menu to show up
+
+    turns out, there isn't an API to create a context menu. You add it via *Preferences*...
+    [[./doc/img/ss-002.png]]
+
+    *Toolbar*...
+    [[./doc/img/ss-003.png]]
+
+    ...*books in the calibre library*...
+    [[./doc/img/ss-004.png]]
+
+    and move it to the right pane.
+    [[./doc/img/ss-005.png]]
+
+    
