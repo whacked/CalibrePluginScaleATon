@@ -236,8 +236,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
            actual_plugin       = 'calibre_plugins.myplugin.ui:RightClickPlugin'
        
            def is_customizable(self):
-               # disable this for now
-               return False
+               return True
        
            def config_widget(self):
                from calibre_plugins.myplugin.config import ConfigWidget
@@ -263,7 +262,6 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      #+begin_src python :tangle MyPlugin/ui.py
        from calibre.gui2.actions import InterfaceAction
        from calibre.gui2 import question_dialog, info_dialog
-       from calibre_plugins.myplugin.main import 
        
        class RightClickPlugin(InterfaceAction):
        
@@ -272,6 +270,8 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
            action_spec = ('Right Click Menu', None,
                           'Activate the menu', None) # None = no keyboard shortcut
        
+           action_type = 'current'
+
            def genesis(self):
                # skip the icon creation
                # icon = get_icons('images/icon.png')
@@ -294,10 +294,42 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
                info_dialog(self.gui, "Item info", str("TODO: add book info"), show=True)
        
            def apply_settings(self):
-               from calibre_plugins.interface_demo.config import prefs
+               from calibre_plugins.myplugin.config import prefs
                # In an actual non trivial plugin, you would probably need to
                # do something based on the settings in prefs
                prefs
        
      #+end_src
 
+**** config.py
+
+     #+begin_src python :tangle MyPlugin/config.py
+       from PyQt4.Qt import QWidget, QHBoxLayout, QLabel, QLineEdit
+       
+       from calibre.utils.config import JSONConfig
+       
+       # You should always prefix your config file name with plugins/,
+       # so as to ensure you dont accidentally clobber a calibre config file
+       prefs = JSONConfig('plugins/myplugin')
+       
+       # Set defaults
+       prefs.defaults['my_msg_header'] = 'Your book info:'
+       
+       class ConfigWidget(QWidget):
+       
+           def __init__(self):
+               QWidget.__init__(self)
+               self.l = QHBoxLayout()
+               self.setLayout(self.l)
+       
+               self.label = QLabel('Message header:')
+               self.l.addWidget(self.label)
+       
+               self.msg = QLineEdit(self)
+               self.msg.setText(prefs['my_msg_header'])
+               self.l.addWidget(self.msg)
+               self.label.setBuddy(self.msg)
+       
+           def save_settings(self):
+               prefs['my_msg_header'] = unicode(self.msg.text())
+     #+end_src
