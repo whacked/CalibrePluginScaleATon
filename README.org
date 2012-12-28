@@ -272,6 +272,16 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      : ImportError: No module named twisted
      : 
 
+**** python =__init__.py= hack for zope.interface
+
+     we get =ImportError: Twisted requires zope.interface 3.6.0 or later: no module named zope.interface.=
+
+     from hacking around the paths and forcing an unexpected import; to workaround that:
+
+     #+begin_src sh :results output :exports both
+     touch venv/lib/python2.7/site-packages/zope/__init__.py
+     #+end_src
+
 **** path hacks to make calibre load our =venv= packages
 
      hacked the =sys.path= directly:
