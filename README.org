@@ -327,7 +327,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
 **** install =see= to help us poke around
 
-     #+begin_src sh :results output :exports both
+     #+begin_src sh :results output :exports both :eval never
      . venv/bin/activate
      pip install termcolor see
      #+end_src
