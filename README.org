@@ -215,21 +215,55 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
                  tried this. unable to find good workaround for =ValueError: API 'QString' has already been set to version 1=
     - twisted.manhole :: this worked, covered below
 
-**** force calibre to use system-wide python
+**** install twisted
 
-     I skipped a =pip= install for =twisted=. But you will still need to hack =calibre= to force it to load external libraries.
+     for the sake of completeness we'll install =twisted= via =pip=:
 
-     firstly, when you start =calibre-debug= you need to set the =CALIBRE_DEVELOP_FROM= variable.
+     #+begin_src sh :results output :exports both :eval never
+     . venv/bin/activate
+     pip install twisted
+     #+end_src
+
+     #+RESULTS:
+     #+begin_example
+       Downloading/unpacking twisted
+         Downloading Twisted-12.3.0.tar.bz2 (2.6MB): 2.6MB downloaded
+         Running setup.py egg_info for package twisted
+           
+       Downloading/unpacking zope.interface>=3.6.0 (from twisted)
+         Downloading zope.interface-4.0.2.tar.gz (139kB): 139kB downloaded
+         Running setup.py egg_info for package zope.interface
+           
+       Requirement already satisfied (use --upgrade to upgrade): setuptools in ./venv/lib/python2.7/site-packages/setuptools-0.6c11-py2.7.egg (from zope.interface>=3.6.0->twisted)
+       Installing collected packages: twisted, zope.interface
+         Running setup.py install for twisted
+           
+           gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I/usr/include/python2.7 -c conftest.c -o conftest.o
+       
+           # ... #
+           # ... # elided
+           # ... #
+       
+       Successfully installed twisted zope.interface
+       Cleaning up...
+       
+     #+end_example
+
+**** running =calibre-debug=
+
+     when you start =calibre-debug= you need to set the =CALIBRE_DEVELOP_FROM= variable.
 
      without modifying the virtualenv init script, this ad-hoc call works:
      
      #+begin_src sh :eval never :exports both :eval never
+     . venv/bin/activate
      CALIBRE_DEVELOP_FROM=../calibre-src/src calibre-debug -g
      #+end_src
 
      but if we put e.g. =import twisted= at the top of =calibre-src/src/calibre/__init__.py= and run that, we get:
 
      #+begin_src sh :results output :exports both :eval never
+     . venv/bin/activate
      CALIBRE_DEVELOP_FROM=../calibre-src/src calibre-debug -g
      #+end_src
 
@@ -238,7 +272,9 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      : ImportError: No module named twisted
      : 
 
-     I just hacked the =sys.path= directly:
+**** path hacks to make calibre load our =venv= packages
+
+     hacked the =sys.path= directly:
 
      #+begin_src sh :results output :exports both :eval never
      head ../calibre-src/src/calibre/__init__.py
@@ -246,16 +282,16 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
      #+RESULTS:
      #+begin_example
-     import sys
+     import os, sys
      print "this is the modified __init__.py in calibre-src"
      print sys.version
 
-     sys.path.extend(['/usr/lib/python2.7',
-                      '/usr/lib/python2.7/dist-packages',
-                      '/usr/local/lib/python2.7/dist-packages',
-                      ])
-     import twisted
 
+     sys.path.extend([
+         os.path.abspath('venv/lib/python2.7/site-packages'),
+                      ])
+
+     import twisted
      #+end_example
 
      then it starts, and you can =import twisted= from within the plugin.
@@ -288,6 +324,32 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      #+end_src
      
      calling =reactor.stop()= cedes control back to calibre. You can also =Ctrl-C= from the terminal where you launched calibre.
+
+**** install =see= to help us poke around
+
+     #+begin_src sh :results output :exports both
+     . venv/bin/activate
+     pip install termcolor see
+     #+end_src
+
+     #+RESULTS:
+     #+begin_example
+     Downloading/unpacking termcolor
+       Downloading termcolor-1.1.0.tar.gz
+       Running setup.py egg_info for package termcolor
+
+     Downloading/unpacking see
+       Downloading see-1.0.1.tar.bz2
+       Running setup.py egg_info for package see
+
+     Installing collected packages: termcolor, see
+       Running setup.py install for termcolor
+
+       Running setup.py install for see
+
+     Successfully installed termcolor see
+     Cleaning up...
+     #+end_example
 
 *** Right-click menu plugin
 
