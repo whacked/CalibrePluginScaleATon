@@ -29,15 +29,21 @@ class RightClickPlugin(InterfaceAction):
         # self.gui is the main calibre GUI. It acts as the gateway to access
         # all the elements of the calibre user interface, it should also be the
         # parent of the dialog
-        # TODO: add book info
-        info_dialog(self.gui, "Item info", str("TODO: add book info"), show=True)
+        m = self.gui.library_view.model()
+        selected_ids = self.gui.library_view.get_selected_ids()
+        id_rows      = self.gui.library_view.ids_to_rows(selected_ids)
+        if len(selected_ids) is 0: return
+        
+        retrieve_id = id_rows[selected_ids[0]]
+        info = m.get_book_info(retrieve_id)
+        str_info = "\n".join(map(lambda k: "%s: %s" % (k, info.get(k)), ['application_id', 'title', 'authors', 'timestamp']))
+        info_dialog(self.gui, "Item info", str_info, show=True)
         
         # here's the telnet manhole
         from twisted.internet import reactor
         from twisted.manhole import telnet
         
         context = locals()
-        context['gui'] = self.gui
         
         def createShellServer():
             factory = telnet.ShellFactory()
@@ -47,8 +53,9 @@ class RightClickPlugin(InterfaceAction):
             factory.password = ''
             return port
        
-        reactor.callWhenRunning(createShellServer)
-        reactor.run()
+        if question_dialog(self.gui, "telnet manhole section", "start shell server?"):
+            reactor.callWhenRunning(createShellServer)
+            reactor.run()
 
     def apply_settings(self):
         from calibre_plugins.myplugin.config import prefs

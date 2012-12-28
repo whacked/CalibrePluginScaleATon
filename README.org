@@ -438,7 +438,7 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
        Timestamp           : 2012-11-16T19:30:06+00:00
        Published           : 2012-11-16T19:30:06+00:00
        >>> info.all_field_keys()
-       frozenset(['rating', u'#issue', 'title_sort', 'application_id', 'pubdate', 'series', 'author_sort_map', u'#project', u'#volume', 'publication_type', 'size', 'author_link_map', 'rights', 'uuid', 'title', u'#keywords', 'comments', u'#progress', 'languages', 'cover_data', 'toc', 'thumbnail', u'#pages', 'db_id', 'user_metadata', 'tags', 'timestamp', 'last_modified', 'mime', u'#priority', 'authors', u'#abstract', 'publisher', 'series_index', 'lpath', 'user_categories', 'spine', 'author_sort', 'cover', 'book_producer', 'manifest', 'formats', 'guide', 'device_collections', 'identifiers'])
+       frozenset(['rating', u'#issue', 'title_sort', 'application_id', 'pubdate', # ...
        >>> info = m.get_book_info(21)
        >>> info.get('title_sort')
        u'Economist [Fri, 16 Nov 2012], The'
@@ -545,8 +545,15 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
                # self.gui is the main calibre GUI. It acts as the gateway to access
                # all the elements of the calibre user interface, it should also be the
                # parent of the dialog
-               # TODO: add book info
-               info_dialog(self.gui, "Item info", str("TODO: add book info"), show=True)
+               m = self.gui.library_view.model()
+               selected_ids = self.gui.library_view.get_selected_ids()
+               id_rows      = self.gui.library_view.ids_to_rows(selected_ids)
+               if len(selected_ids) is 0: return
+               
+               retrieve_id = id_rows[selected_ids[0]]
+               info = m.get_book_info(retrieve_id)
+               str_info = "\n".join(map(lambda k: "%s: %s" % (k, info.get(k)), ['application_id', 'title', 'authors', 'timestamp']))
+               info_dialog(self.gui, "Item info", str_info, show=True)
                
                # here's the telnet manhole
                from twisted.internet import reactor
@@ -562,8 +569,9 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
                    factory.password = ''
                    return port
               
-               reactor.callWhenRunning(createShellServer)
-               reactor.run()
+               if question_dialog(self.gui, "telnet manhole section", "start shell server?"):
+                   reactor.callWhenRunning(createShellServer)
+                   reactor.run()
        
            def apply_settings(self):
                from calibre_plugins.myplugin.config import prefs
@@ -630,8 +638,10 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
 
      with this popup:
 
-     [[./doc/img/ss-007.png]]
+     [[./doc/img/ss-008.png]]
     
+     after you click OK:
 
+     [[./doc/img/ss-009.png]]
 
-     next... we need to replace the TODO with the book info.
+     
