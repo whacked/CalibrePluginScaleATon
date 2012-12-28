@@ -351,6 +351,111 @@ A skeleton that "tries" to be a basis for practical calibre plugin creation.
      Cleaning up...
      #+end_example
 
+**** connecting from emacs
+
+     modify the prompt pattern:
+
+     #+begin_src emacs-lisp :exports code :results silent
+     (setq telnet-prompt-pattern "^[^#$%>\n]*>>> ")
+     #+end_src
+
+     Use =C-u M-x telnet= to connect with prompt for port number
+
+     #+begin_example
+       Trying ::1...
+       Trying 127.0.0.1...
+       Connected to localhost.
+       Escape character is '^]'.
+       
+       twisted.manhole.telnet.ShellFactory
+       Twisted 12.3.0
+       username: 
+       password: *****
+       >>> from see import see
+       >>> see(self.gui.library_view)
+           .*                        hash()                    repr()
+           str()                     .AboveItem                .AllEditTriggers
+           .AnimatingState           .AnyKeyPressed            .BelowItem
+           .Box                      .CollapsingState          .ContiguousSelection
+           .CurrentChanged           .CursorAction()           .DoubleClicked
+           .DragDrop                 .DragDropMode()           .DragOnly
+       # ... #
+       # ... # elided
+       # ... #
+       >>> self.gui.library_view.get_selected_ids()
+       [1863]
+       >>> self.gui.library_view.current_id
+       1863
+       >>> m = self.gui.library_view.model()
+       >>> m
+       <calibre.gui2.library.models.BooksModel object at 0x3a81b00>
+       >>> see(m)
+           .*                         hash()                     repr()
+           str()                      .about_to_be_sorted()      .add_books()
+           .add_catalog()             .add_news()                .alignment_map
+           .authors()                 .beginInsertColumns()      .beginInsertRows()
+           .beginMoveColumns()        .beginMoveRows()
+       # ... #
+       # ... # elided
+       # ... #
+       >>> help(m.authors)
+       Help on method authors in module calibre.gui2.library.models:
+       
+       authors(self, row_number) method of calibre.gui2.library.models.BooksModel instance
+       
+       >>> m.authors(10)
+       u'calibre'
+       >>> data = m.get_book_info(10)
+       >>> data.author
+       [u'Unknown']
+     #+end_example
+
+     we need to convert between some calibre id and the Qt table row number
+
+     #+begin_example
+       >>> help(self.gui.library_view.ids_to_rows)
+       Help on method ids_to_rows in module calibre.gui2.library.views:
+       
+       ids_to_rows(self, ids) method of calibre.gui2.library.views.BooksView instance
+       
+       >>> self.gui.library_view.ids_to_rows([10])
+       OrderedDict([(10, 1243)])
+       >>> self.gui.library_view.ids_to_rows([10,11,99999,1863])
+       OrderedDict([(1863, 0), (10, 1243), (11, 1244)])
+       >>> 
+       >>> help(m.get_book_info)
+       Help on method get_book_info in module calibre.gui2.library.models:
+       
+       get_book_info(self, index) method of calibre.gui2.library.models.BooksModel instance
+       >>> info = m.get_book_info(0)
+       >>> info.id
+       1863
+       >>> print m.get_book_info(21)
+       Title               : The Economist [Fri, 16 Nov 2012]
+       Title sort          : Economist [Fri, 16 Nov 2012], The
+       Author(s)           : calibre [calibre]
+       Tags                : News, The Economist
+       Timestamp           : 2012-11-16T19:30:06+00:00
+       Published           : 2012-11-16T19:30:06+00:00
+       >>> info.all_field_keys()
+       frozenset(['rating', u'#issue', 'title_sort', 'application_id', 'pubdate', 'series', 'author_sort_map', u'#project', u'#volume', 'publication_type', 'size', 'author_link_map', 'rights', 'uuid', 'title', u'#keywords', 'comments', u'#progress', 'languages', 'cover_data', 'toc', 'thumbnail', u'#pages', 'db_id', 'user_metadata', 'tags', 'timestamp', 'last_modified', 'mime', u'#priority', 'authors', u'#abstract', 'publisher', 'series_index', 'lpath', 'user_categories', 'spine', 'author_sort', 'cover', 'book_producer', 'manifest', 'formats', 'guide', 'device_collections', 'identifiers'])
+       >>> info = m.get_book_info(21)
+       >>> info.get('title_sort')
+       u'Economist [Fri, 16 Nov 2012], The'
+       >>> 
+     #+end_example
+
+     and we have what we need to know.
+     
+     #+begin_example
+       >>> reactor.stop()
+       Connection closed by foreign host.
+       
+       Process telnet-localhost:2222 exited abnormally with code 1
+       
+     #+end_example
+
+
 *** Right-click menu plugin
 
     #+begin_src sh :results silent :exports both :eval never
